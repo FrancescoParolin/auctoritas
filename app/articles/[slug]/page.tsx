@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getArticleBySlug, getAllArticles, topics } from '@/lib/data'
-import CommentThread from '@/components/discuss/CommentThread'
+import { getArticleBySlug, getAllArticles } from '@/lib/data'
+import ReadingProgress from '@/components/articles/ReadingProgress'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -30,11 +30,11 @@ export default async function ArticlePage({ params }: Props) {
   const article = await getArticleBySlug(slug)
   if (!article) notFound()
 
-  const relatedTopic = topics.find((t) => t.relatedArticleSlug === slug)
   const paragraphs = article.content.split('\n\n').filter(Boolean)
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
+      <ReadingProgress />
       <div className="max-w-2xl mx-auto">
         {/* Back */}
         <Link
@@ -47,10 +47,7 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Category + meta */}
         <div className="flex items-center gap-4 mb-5">
-          <span
-            className="text-xs tracking-widest uppercase"
-            style={{ color: 'var(--color-gold)' }}
-          >
+          <span className="label-smallcaps" style={{ color: 'var(--color-gold)' }}>
             {article.category}
           </span>
           <span className="text-xs" style={{ color: 'var(--color-ink-muted)' }}>
@@ -119,39 +116,6 @@ export default async function ArticlePage({ params }: Props) {
           ))}
         </div>
 
-        {/* Inline discussion */}
-        {relatedTopic && (
-          <div
-            className="mt-16 pt-12 border-t"
-            style={{ borderColor: 'var(--color-rule)' }}
-          >
-            <div className="mb-8">
-              <p
-                className="text-xs tracking-widest uppercase mb-2"
-                style={{ color: 'var(--color-gold)' }}
-              >
-                Discussione
-              </p>
-              <h2
-                className="text-2xl font-bold leading-tight"
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  color: 'var(--color-ink)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                {relatedTopic.title}
-              </h2>
-              <p
-                className="mt-2 text-sm leading-relaxed"
-                style={{ color: 'var(--color-ink-muted)' }}
-              >
-                {relatedTopic.description}
-              </p>
-            </div>
-            <CommentThread topicId={relatedTopic.id} />
-          </div>
-        )}
       </div>
     </div>
   )

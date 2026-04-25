@@ -64,8 +64,8 @@ export default async function ArticlesPage() {
 
       {/* Articles list */}
       <div>
-        {sorted.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+        {sorted.map((article, i) => (
+          <ArticleCard key={article.id} article={article} index={i + 1} total={sorted.length} />
         ))}
       </div>
     </div>

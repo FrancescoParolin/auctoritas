@@ -1,131 +1,127 @@
 import Link from 'next/link'
 
-const featuredLinks = [
-  {
-    category: 'GEOPOLITICA',
-    title: 'SIPRI — Stockholm International Peace Research Institute',
-    description: 'Dati e analisi su conflitti armati, spese militari e controllo degli armamenti.',
-    url: 'https://sipri.org',
-    tag: 'Ricerca',
-  },
-  {
-    category: 'ECONOMIA',
-    title: 'IMF World Economic Outlook',
-    description: 'Rapporto semestrale del Fondo Monetario Internazionale sulle prospettive economiche globali.',
-    url: 'https://imf.org/en/Publications/WEO',
-    tag: 'Dati',
-  },
-  {
-    category: 'CLIMA',
-    title: 'UNEP Emissions Gap Report',
-    description: 'Il rapporto annuale sul divario tra impegni climatici e riduzione effettiva delle emissioni.',
-    url: 'https://unep.org/resources/emissions-gap-report',
-    tag: 'Rapporto',
-  },
+// Tutte le fonti citate in /risorse — wall di favicon
+const sources = [
+  { name: 'SIPRI', url: 'https://sipri.org' },
+  { name: 'Crisis Group', url: 'https://crisisgroup.org' },
+  { name: 'Foreign Affairs', url: 'https://foreignaffairs.com' },
+  { name: 'CFR', url: 'https://cfr.org' },
+  { name: 'IMF', url: 'https://imf.org' },
+  { name: 'OECD', url: 'https://oecd.org' },
+  { name: 'BIS', url: 'https://bis.org' },
+  { name: 'UNEP', url: 'https://unep.org' },
+  { name: 'IEA', url: 'https://iea.org' },
+  { name: 'Global Carbon Project', url: 'https://globalcarbonproject.org' },
+  { name: 'V-Dem', url: 'https://v-dem.net' },
+  { name: 'Freedom House', url: 'https://freedomhouse.org' },
+  { name: 'EIU', url: 'https://eiu.com' },
+  { name: 'GovAI', url: 'https://governance.ai' },
+  { name: 'MIT Tech Review', url: 'https://technologyreview.com' },
+  { name: 'AISI', url: 'https://gov.uk' },
 ]
+
+function domainOf(url: string): string {
+  try { return new URL(url).hostname.replace(/^www\./, '') }
+  catch { return url }
+}
 
 export default function LinkUtiliPreview() {
   return (
     <section
-      className="py-16"
-      style={{
-        borderTop: '1px solid var(--color-rule)',
-        backgroundColor: 'var(--color-paper-dark)',
-      }}
+      className="py-20"
+      style={{ borderTop: '1px solid var(--color-rule)' }}
     >
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <p
-              className="text-xs tracking-widest uppercase mb-3"
-              style={{ color: 'var(--color-gold)', letterSpacing: '0.18em' }}
-            >
-              Fonti &amp; Risorse
-            </p>
-            <h2
-              className="text-3xl font-bold"
-              style={{
-                fontFamily: 'var(--font-display)',
-                color: 'var(--color-ink)',
-                letterSpacing: '-0.01em',
-              }}
-            >
-              Link Utili
-            </h2>
-          </div>
-          <Link
-            href="/risorse"
-            className="text-xs tracking-widest uppercase transition-colors hover:text-gold"
-            style={{ color: 'var(--color-ink-muted)', letterSpacing: '0.12em' }}
+        {/* Header */}
+        <div className="text-center mb-12 max-w-2xl mx-auto">
+          <p className="label-smallcaps mb-3" style={{ color: 'var(--color-gold)' }}>
+            Le voci che ascoltiamo
+          </p>
+          <h2
+            className="text-3xl md:text-4xl font-bold leading-tight"
+            style={{
+              fontFamily: 'var(--font-display)',
+              color: 'var(--color-ink)',
+              letterSpacing: '-0.02em',
+            }}
           >
-            Tutti →
-          </Link>
+            Le nostre fonti
+          </h2>
+          <p
+            className="mt-4 text-sm leading-relaxed"
+            style={{ color: 'var(--color-ink-muted)' }}
+          >
+            Non scriviamo dal nulla. Leggiamo, verifichiamo, citiamo. Queste sono le istituzioni di ricerca, gli osservatori e le pubblicazioni su cui costruiamo le nostre analisi.
+          </p>
         </div>
 
-        <div>
-          {featuredLinks.map((link, i) => (
-            <a
-              key={link.url}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-start justify-between py-7 group"
-              style={{ borderTop: i > 0 ? '1px solid var(--color-rule)' : undefined }}
-            >
-              <div className="flex-1 pr-8">
-                <div className="flex items-center gap-2 mb-2">
-                  <span
-                    className="text-xs px-2 py-0.5"
-                    style={{
-                      color: 'var(--color-gold)',
-                      border: '1px solid var(--color-gold)',
-                      opacity: 0.75,
-                      letterSpacing: '0.1em',
-                      fontSize: '0.65rem',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {link.category}
-                  </span>
-                  <span
-                    className="text-xs px-2 py-0.5"
-                    style={{
-                      color: 'var(--color-ink-muted)',
-                      border: '1px solid var(--color-rule)',
-                      letterSpacing: '0.08em',
-                      fontSize: '0.65rem',
-                    }}
-                  >
-                    {link.tag}
-                  </span>
-                </div>
-                <h3
-                  className="text-lg font-bold leading-snug group-hover:text-gold transition-colors"
+        {/* Ornament rule */}
+        <div className="ornament-rule mb-12">
+          <span style={{ fontSize: '0.85rem', letterSpacing: '0.4em' }}>◆</span>
+        </div>
+
+        {/* Sources wall */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-px"
+          style={{ backgroundColor: 'var(--color-rule)' }}
+        >
+          {sources.map((src) => {
+            const domain = domainOf(src.url)
+            return (
+              <a
+                key={src.url}
+                href={src.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="source-tile group flex flex-col items-center justify-center gap-3 px-3 py-6"
+                title={src.name}
+              >
+                <span
+                  className="flex items-center justify-center w-12 h-12 rounded overflow-hidden source-favicon"
                   style={{
-                    fontFamily: 'var(--font-display)',
-                    color: 'var(--color-ink)',
-                    letterSpacing: '-0.01em',
+                    backgroundColor: 'var(--color-paper)',
+                    border: '1px solid var(--color-rule)',
+                    transition: 'all 0.28s ease',
                   }}
                 >
-                  {link.title}
-                </h3>
-                <p
-                  className="mt-1.5 text-sm line-clamp-1"
-                  style={{ color: 'var(--color-ink-muted)', lineHeight: '1.6' }}
-                >
-                  {link.description}
-                </p>
-              </div>
-              <div className="flex-none text-right pl-4 pt-1">
-                <span
-                  className="text-xl"
-                  style={{ color: 'var(--color-gold)', opacity: 0.6 }}
-                >
-                  ↗
+                  <img
+                    src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
+                    alt=""
+                    width={26}
+                    height={26}
+                    style={{ width: 26, height: 26, objectFit: 'contain' }}
+                  />
                 </span>
-              </div>
-            </a>
-          ))}
+                <span
+                  className="text-[10px] tracking-widest uppercase text-center leading-tight source-label"
+                  style={{
+                    color: 'var(--color-ink-muted)',
+                    letterSpacing: '0.12em',
+                    transition: 'color 0.28s ease',
+                  }}
+                >
+                  {src.name}
+                </span>
+              </a>
+            )
+          })}
+        </div>
+
+        {/* CTA */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/risorse"
+            className="inline-flex items-center gap-2 group label-smallcaps"
+            style={{
+              color: 'var(--color-ink-secondary)',
+              borderBottom: '1px solid var(--color-rule-strong)',
+              paddingBottom: '4px',
+            }}
+          >
+            Vedi tutte le fonti con descrizione
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.28s ease' }} className="group-hover:translate-x-1">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

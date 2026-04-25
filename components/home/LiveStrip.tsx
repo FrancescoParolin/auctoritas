@@ -12,22 +12,10 @@ function StripCard({ article }: { article: Article }) {
       style={{ textDecoration: 'none', width: '300px' }}
     >
       <article
-        className="strip-card h-full border"
-        style={{
-          borderColor: 'var(--color-rule)',
-          backgroundColor: 'var(--color-paper-dark)',
-          padding: '1.4rem 1.5rem 1.3rem',
-        }}
+        className="strip-card h-full"
+        style={{ padding: '1.5rem 1.5rem 1.35rem 1.65rem' }}
       >
-        {/* Categoria in italic */}
-        <span
-          className="text-xs tracking-widest uppercase"
-          style={{
-            color: 'var(--color-gold)',
-            fontFamily: 'var(--font-body)',
-            letterSpacing: '0.13em',
-          }}
-        >
+        <span className="label-smallcaps" style={{ color: 'var(--color-gold)' }}>
           {article.category}
         </span>
 
@@ -134,21 +122,15 @@ export default function LiveStrip({ articles }: { articles: Article[] }) {
             </span>
           </div>
           <div className="flex gap-2">
-            <button
-              onClick={() => scrollBy('prev')}
-              className="w-8 h-8 flex items-center justify-center border transition-colors hover:border-gold"
-              style={{ borderColor: 'var(--color-rule)', color: 'var(--color-ink-muted)' }}
-              aria-label="Previous"
-            >
-              ←
+            <button onClick={() => scrollBy('prev')} className="btn-arrow" aria-label="Precedente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
             </button>
-            <button
-              onClick={() => scrollBy('next')}
-              className="w-8 h-8 flex items-center justify-center border transition-colors hover:border-gold"
-              style={{ borderColor: 'var(--color-rule)', color: 'var(--color-ink-muted)' }}
-              aria-label="Next"
-            >
-              →
+            <button onClick={() => scrollBy('next')} className="btn-arrow" aria-label="Successivo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
         </div>

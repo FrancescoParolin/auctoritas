@@ -1,19 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette calda e autorevole */
+  /* Palette calda autorevole */
   --color-gold:          #c8901e;
   --color-gold-light:    #dda83a;
   --color-gold-dark:     #9a6a10;
   --color-gold-glow:     rgba(200, 144, 30, 0.12);
 
-  --color-ink:           #18130d;   /* nero caldo, non freddo */
+  --color-ink:           #18130d;
   --color-ink-secondary: #3a2e22;
   --color-ink-muted:     #8a7a68;
-  --color-paper:         #f3ede0;   /* carta ambrata, calda */
-  --color-paper-dark:    #e9e2d0;
+  --color-paper:         #f3ede0;
+  --color-paper-dark:    #ebe3cf;
   --color-paper-accent:  #e0d6c0;
-  --color-rule:          #ccc2b0;
+  --color-rule:          #c9bea8;
+  --color-rule-strong:   #a8997f;
+
+  --shadow-warm-sm: 0 1px 2px rgba(60, 40, 10, 0.04), 0 1px 1px rgba(60, 40, 10, 0.06);
+  --shadow-warm-md: 0 4px 14px -4px rgba(60, 40, 10, 0.08), 0 2px 4px rgba(60, 40, 10, 0.05);
+  --shadow-warm-lg: 0 18px 40px -16px rgba(60, 40, 10, 0.18), 0 6px 14px -6px rgba(60, 40, 10, 0.08);
+  --shadow-gold-glow: 0 0 0 1px rgba(200, 144, 30, 0.18), 0 12px 28px -10px rgba(200, 144, 30, 0.22);
 
   --font-display: var(--font-playfair), Georgia, 'Times New Roman', serif;
   --font-body:    var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -24,7 +30,15 @@
   to   { transform: translateX(-50%); }
 }
 
-html { scroll-behavior: smooth; cursor: url('/cursor.svg') 16 16, auto; }
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+html {
+  scroll-behavior: smooth;
+  cursor: url('/cursor.svg') 16 16, auto;
+}
 a, button { cursor: url('/cursor.svg') 16 16, pointer; }
 
 body {
@@ -40,50 +54,155 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Overlay caldo sopra il marmo — mantiene palette ambrata */
+/* Overlay caldo + vignette radiale per focus centro pagina */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-color: rgba(243, 237, 224, 0.55);
+  background:
+    radial-gradient(ellipse at center, rgba(243,237,224,0.62) 0%, rgba(243,237,224,0.86) 55%, rgba(225,213,189,0.92) 100%);
 }
 
-/* Tutto il contenuto sopra l'overlay */
 body > * { position: relative; z-index: 1; }
 
 /* Scrollbar hidden */
 .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 
-/* ── NAV BLOCKS hover: dark invert ── */
+/* ─────────────────────────────────────
+   Tipografia editoriale
+   ───────────────────────────────────── */
+.label-smallcaps {
+  font-family: var(--font-body);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+.serif-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────
+   Card editoriale (LiveStrip + altre)
+   ───────────────────────────────────── */
+.editorial-card {
+  position: relative;
+  background-color: rgba(252, 248, 238, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--color-rule);
+  box-shadow: var(--shadow-warm-sm);
+  transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1),
+              box-shadow 0.28s cubic-bezier(0.2,0.7,0.2,1),
+              border-color 0.28s ease;
+  overflow: hidden;
+}
+.editorial-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--color-gold-light), var(--color-gold), var(--color-gold-dark));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.32s cubic-bezier(0.2,0.7,0.2,1);
+}
+.editorial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-warm-md);
+  border-color: var(--color-rule-strong);
+}
+.editorial-card:hover::before { transform: scaleY(1); }
+
+/* ─────────────────────────────────────
+   NAV BLOCKS (home tre quadrati)
+   ───────────────────────────────────── */
 .nav-block {
+  position: relative;
   --nb-text:   var(--color-ink);
   --nb-muted:  var(--color-ink-muted);
   --nb-accent: var(--color-gold);
-  --nb-bg:     var(--color-paper);
+  --nb-bg:     rgba(252, 248, 238, 0.85);
   background-color: var(--nb-bg);
-  transition: background-color 0.28s ease;
+  transition: background-color 0.32s ease, transform 0.32s ease;
+  overflow: hidden;
+}
+
+/* Ornamenti angolari oro */
+.nav-block::before,
+.nav-block::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--nb-accent);
+  opacity: 0.9;
+  transition: width 0.32s ease, height 0.32s ease, opacity 0.32s ease;
+  pointer-events: none;
+}
+.nav-block::before {
+  top: 14px; left: 14px;
+  border-right: none; border-bottom: none;
+}
+.nav-block::after {
+  bottom: 14px; right: 14px;
+  border-left: none; border-top: none;
 }
 .nav-block:hover {
   --nb-text:   var(--color-paper);
-  --nb-muted:  rgba(243, 237, 224, 0.55);
+  --nb-muted:  rgba(243, 237, 224, 0.65);
   --nb-accent: var(--color-gold-light);
   --nb-bg:     var(--color-ink);
   background-color: var(--nb-bg);
 }
+.nav-block:hover::before,
+.nav-block:hover::after {
+  width: 22px;
+  height: 22px;
+  opacity: 1;
+}
+.nav-block:hover .nav-block-arrow { transform: translateX(5px); }
 
-/* ── STRIP CARD hover ── */
+/* ─────────────────────────────────────
+   STRIP CARD (LiveStrip orizzontale)
+   ───────────────────────────────────── */
 .strip-card {
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  position: relative;
+  background-color: rgba(252, 248, 238, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--color-rule);
+  box-shadow: var(--shadow-warm-sm);
+  transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1),
+              box-shadow 0.28s ease,
+              border-color 0.28s ease;
+  overflow: hidden;
+}
+.strip-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--color-gold-light), var(--color-gold-dark));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s cubic-bezier(0.2,0.7,0.2,1);
 }
 .strip-card:hover {
-  border-color: var(--color-gold) !important;
-  background-color: var(--color-paper-dark) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-warm-md);
+  border-color: var(--color-rule-strong);
 }
+.strip-card:hover::before { transform: scaleY(1); }
 
-/* ── ARTICLE CARD hover underline ── */
+/* ─────────────────────────────────────
+   ARTICLE CARD (lista articoli)
+   ───────────────────────────────────── */
 .article-title {
   position: relative;
   display: inline;
@@ -91,19 +210,200 @@ body > * { position: relative; z-index: 1; }
   background-size: 0 1px;
   background-repeat: no-repeat;
   background-position: 0 100%;
-  transition: background-size 0.3s ease;
+  transition: background-size 0.32s cubic-bezier(0.2,0.7,0.2,1);
 }
 .group:hover .article-title { background-size: 100% 1px; }
 
-/* ── Prose article ── */
+.article-row {
+  transition: padding 0.28s ease, background-color 0.28s ease;
+  border-radius: 2px;
+}
+.article-row:hover {
+  background-color: rgba(252, 248, 238, 0.55);
+}
+
+.article-index {
+  font-family: var(--font-display);
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  color: var(--color-gold);
+  opacity: 0.5;
+  letter-spacing: 0.08em;
+  transition: opacity 0.28s ease;
+}
+.group:hover .article-index { opacity: 1; }
+
+/* ─────────────────────────────────────
+   ARROW BUTTON (LiveStrip ← →)
+   ───────────────────────────────────── */
+.btn-arrow {
+  width: 36px; height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-rule);
+  background-color: rgba(252, 248, 238, 0.6);
+  color: var(--color-ink-secondary);
+  transition: all 0.22s ease;
+  border-radius: 999px;
+}
+.btn-arrow:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-dark);
+  box-shadow: 0 0 0 4px var(--color-gold-glow);
+  transform: translateY(-1px);
+}
+.btn-arrow:active { transform: translateY(0); }
+.btn-arrow svg { width: 14px; height: 14px; }
+
+/* ─────────────────────────────────────
+   PROSE ARTICLE
+   ───────────────────────────────────── */
 .prose-editorial p {
   margin-bottom: 1.6rem;
   line-height: 1.9;
   font-size: 1.0625rem;
   color: var(--color-ink-secondary);
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
 }
 .prose-editorial p:first-child {
-  font-size: 1.15rem;
-  line-height: 1.8;
+  font-size: 1.18rem;
+  line-height: 1.78;
   color: var(--color-ink);
+}
+/* Drop cap classico sulla prima lettera del primo paragrafo */
+.prose-editorial > p:first-child::first-letter {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 4.6rem;
+  line-height: 0.85;
+  float: left;
+  margin: 0.4rem 0.7rem 0 -0.15rem;
+  color: var(--color-gold-dark);
+  background: linear-gradient(180deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─────────────────────────────────────
+   READING PROGRESS BAR
+   ───────────────────────────────────── */
+.reading-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-gold-light), var(--color-gold), var(--color-gold-dark));
+  z-index: 50;
+  transform-origin: left;
+  transition: transform 0.05s linear;
+}
+
+/* ─────────────────────────────────────
+   ORNAMENTO CENTRALE (separator)
+   ───────────────────────────────────── */
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--color-gold);
+}
+.ornament-rule::before,
+.ornament-rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to var(--dir, right), transparent, var(--color-rule-strong) 30%, var(--color-rule-strong) 70%, transparent);
+}
+.ornament-rule::after { --dir: left; }
+
+/* ─────────────────────────────────────
+   FOOTER social icon hover
+   ───────────────────────────────────── */
+.social-icon {
+  display: inline-flex;
+  width: 32px; height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--color-rule);
+  color: var(--color-ink-muted);
+  transition: all 0.22s ease;
+}
+.social-icon:hover {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+  background-color: var(--color-gold-glow);
+  transform: translateY(-1px);
+}
+.social-icon svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* fade-in default per sezioni principali */
+.fade-in { animation: fade-in-up 0.5s cubic-bezier(0.2,0.7,0.2,1) both; }
+
+/* ─────────────────────────────────────
+   RESOURCE CARD (/risorse)
+   ───────────────────────────────────── */
+.resource-card {
+  position: relative;
+  background-color: rgba(252, 248, 238, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--color-rule);
+  border-radius: 3px;
+  box-shadow: var(--shadow-warm-sm);
+  text-decoration: none;
+  transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1),
+              box-shadow 0.28s cubic-bezier(0.2,0.7,0.2,1),
+              border-color 0.28s ease,
+              background-color 0.28s ease;
+  overflow: hidden;
+}
+.resource-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 200px 120px at top left, var(--color-gold-glow), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+.resource-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-gold-glow);
+  background-color: rgba(252, 248, 238, 0.92);
+}
+.resource-card:hover::before { opacity: 1; }
+.resource-card:hover h3 { color: var(--color-gold-dark) !important; }
+.resource-arrow {
+  display: inline-flex;
+  transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), opacity 0.28s ease;
+}
+.resource-card:hover .resource-arrow {
+  transform: translate(3px, -3px);
+  opacity: 1 !important;
+}
+
+/* ─────────────────────────────────────
+   SOURCE TILE (home / Le nostre fonti)
+   ───────────────────────────────────── */
+.source-tile {
+  background-color: rgba(252, 248, 238, 0.85);
+  text-decoration: none;
+  transition: background-color 0.28s ease, transform 0.28s ease;
+}
+.source-tile:hover {
+  background-color: rgba(252, 248, 238, 1);
+}
+.source-tile:hover .source-favicon {
+  transform: scale(1.06);
+  border-color: var(--color-gold) !important;
+  box-shadow: 0 0 0 3px var(--color-gold-glow);
+}
+.source-tile .source-favicon {
+  transition: transform 0.28s cubic-bezier(0.2,0.7,0.2,1), border-color 0.28s ease, box-shadow 0.28s ease;
+}
+.source-tile:hover .source-label {
+  color: var(--color-gold-dark) !important;
 }
