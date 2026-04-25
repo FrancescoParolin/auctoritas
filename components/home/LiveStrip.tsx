@@ -142,7 +142,7 @@ export default function LiveStrip({ articles }: { articles: Article[] }) {
           style={{ cursor: 'default' }}
         >
           {items.map((article, i) => (
-            <StripCard key={`${article.id}-${i}`} article={article} />
+            <StripCard key={`strip-${i}`} article={article} />
           ))}
         </div>
       </div>

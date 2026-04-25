@@ -162,11 +162,11 @@ export default function AboutPage() {
           <p className="text-sm" style={{ color: 'var(--color-ink-muted)' }}>
             Corrispondenza editoriale:{' '}
             <a
-              href="mailto:editorial@dispatch.press"
+              href="mailto:redazione@auctoritas.it"
               className="transition-colors hover:text-gold"
               style={{ color: 'var(--color-ink-secondary)' }}
             >
-              editorial@dispatch.press
+              redazione@auctoritas.it
             </a>
           </p>
         </div>

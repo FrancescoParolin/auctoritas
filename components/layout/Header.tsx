@@ -13,6 +13,17 @@ const navLinks = [
 export default function Header() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [today, setToday] = useState('')
+
+  // Set date client-side to avoid hydration mismatch
+  useEffect(() => {
+    setToday(new Date().toLocaleDateString('it-IT', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }))
+  }, [])
 
   // Close on route change
   useEffect(() => { setMenuOpen(false) }, [pathname])
@@ -49,12 +60,7 @@ export default function Header() {
             className="text-xs tracking-widest uppercase whitespace-nowrap"
             style={{ fontFamily: 'var(--font-body)', color: 'var(--color-ink-muted)', letterSpacing: '0.14em' }}
           >
-            {new Date().toLocaleDateString('it-IT', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })}
+            {today || '\u00A0'}
           </span>
           <span className="hidden md:inline" style={{ color: 'var(--color-rule)' }}>·</span>
           <span
@@ -202,7 +208,7 @@ export default function Header() {
               className="label-smallcaps"
               style={{ color: 'rgba(243,237,224,0.5)' }}
             >
-              {new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+              {today}
             </span>
           </div>
         </div>
