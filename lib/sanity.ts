@@ -2,7 +2,7 @@ import { createClient } from 'next-sanity'
 import type { Article } from './types'
 
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'i5wo5gaf',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
@@ -32,7 +32,6 @@ const ARTICLE_PROJECTION = `{
 }`
 
 export async function fetchArticlesFromSanity(): Promise<Article[]> {
-  if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) return []
   try {
     const raw = await client.fetch(`
       *[_type == "article"] | order(publishedAt desc) ${ARTICLE_PROJECTION}
